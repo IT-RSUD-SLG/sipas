@@ -14,7 +14,7 @@
 
     <h2>
         Selamat Datang,
-        {{ Auth::user()->name ?? Auth::user()->nama ?? Auth::user()->no }}
+        {{ Auth::user()->nm_pasien }}
     </h2>
 </body>
 </html>

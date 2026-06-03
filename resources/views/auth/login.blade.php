@@ -1,24 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
-
-<h2>Login</h2>
-
-@if(session('error'))
-    <p>{{ session('error') }}</p>
-@endif
-
-<form action="/login" method="POST">
+<form action="{{ url('/login') }}" method="POST">
     @csrf
 
-    <label>Nomor</label>
-    <input type="text" name="no">
+    <label>No RM</label>
 
-    <button type="submit">Masuk</button>
+    <input
+        type="text"
+        name="no_rkm_medis"
+        required
+    >
+
+    <button type="submit">
+        Masuk
+    </button>
 </form>
-
-</body>
-</html>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Pasien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -17,33 +17,32 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'no' => 'required'
+            'no_rkm_medis' => 'required'
         ]);
 
-        $user = User::where('no', $request->no)->first();
+        $pasien = Pasien::find($request->no_rkm_medis);
 
-        if (!$user) {
-            return back()->with('error', 'Nomor tidak ditemukan');
+        if (!$pasien) {
+            return back()->with('error', 'Nomor RM tidak ditemukan');
         }
 
-        // Belum registrasi
-        if (empty($user->email) || empty($user->password)) {
+        if (empty($pasien->email)) {
 
             session([
-                'register_user_id' => $user->id
+                'register_pasien' => $pasien->no_rkm_medis
             ]);
 
             return redirect()->route('register.form');
         }
 
-        Auth::login($user);
+        Auth::login($pasien);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard.index');
     }
 
     public function registerForm()
     {
-        if (!session()->has('register_user_id')) {
+        if (!session()->has('register_pasien')) {
             return redirect()->route('login');
         }
 
@@ -53,25 +52,27 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email',
             'password' => 'required|min:6|confirmed'
         ]);
 
-        $user = User::find(session('register_user_id'));
+        $pasien = Pasien::find(
+            session('register_pasien')
+        );
 
-        if (!$user) {
+        if (!$pasien) {
             return redirect()->route('login');
         }
 
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $pasien->email = $request->email;
+        $pasien->password = Hash::make($request->password);
+        $pasien->save();
 
-        session()->forget('register_user_id');
+        session()->forget('register_pasien');
 
-        Auth::login($user);
+        Auth::login($pasien);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard.index');
     }
 
     public function logout()

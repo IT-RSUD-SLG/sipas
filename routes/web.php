@@ -27,8 +27,8 @@ Route::post('/register-user', [AuthController::class, 'register'])
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+        return view('dashboard.index');
+    })->name('dashboard.index');
 
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout');

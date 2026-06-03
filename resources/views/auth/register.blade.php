@@ -1,35 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lengkapi Akun</title>
-</head>
-<body>
-
-<h2>Lengkapi Akun</h2>
-
 <form action="{{ route('register') }}" method="POST">
     @csrf
 
-    <label>Email</label>
-    <input type="email" name="email">
+    <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+    >
 
-    <br><br>
+    <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+    >
 
-    <label>Password</label>
-    <input type="password" name="password">
+    <input
+        type="password"
+        name="password_confirmation"
+        placeholder="Konfirmasi Password"
+        required
+    >
 
-    <br><br>
-
-    <label>Konfirmasi Password</label>
-    <input type="password" name="password_confirmation">
-
-    <br><br>
-
-    
     <button type="submit">
         Simpan
     </button>
-    
+
     @if ($errors->any())
         <div>
             @foreach ($errors->all() as $error)
@@ -38,6 +34,3 @@
         </div>
     @endif  
 </form>
-
-</body>
-</html>
